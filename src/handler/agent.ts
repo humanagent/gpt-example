@@ -20,7 +20,9 @@ export async function handler(context: HandlerContext) {
 
     const { reply } = await textGeneration(userPrompt, systemPrompt);
     console.log("intent:", reply);
-    context.intent(reply);
+
+    //context.intent(reply);
+    await context.send(reply);
   } catch (error) {
     console.error("Error during OpenAI call:", error);
     await context.reply("An error occurred while processing your request.");
@@ -38,15 +40,6 @@ function generateSystemPrompt(context: HandlerContext) {
   ### Context
   
   You are a helpful bot agent that lives inside a web3 messaging group that helps interpret user requests and execute commands.
-  #### Users
-   ${JSON.stringify(
-     members?.map((member: User) => ({
-       ...member,
-       username: `@${member.username}`,
-     }))
-   )}\n 
-  #### Commands
-  ${JSON.stringify(commands)}\n
   The message was sent by @${sender?.username}
   
   ### Examples
