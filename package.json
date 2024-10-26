@@ -1,5 +1,5 @@
 {
-  "name": "gm2",
+  "name": "gpt-example",
   "private": true,
   "type": "module",
   "scripts": {
