@@ -1,6 +1,6 @@
 # Example AI Bot
 
-Tgis simple example allows to use GPT as a relayer.
+This simple example allows to use GPT as a relayer.
 
 ---
 
