@@ -1,8 +1,29 @@
-import { run, HandlerContext } from "@xmtp/message-kit";
-import { handler as agent } from "./handler/agent.js";
+import {
+  run,
+  HandlerContext,
+  textGeneration,
+  processMultilineResponse,
+} from "@xmtp/message-kit";
+import { agent_prompt } from "./prompt.js";
 
 run(async (context: HandlerContext) => {
-  // Get the message and the address from the sender
+  const {
+    message: {
+      content: { text, params },
+      sender,
+    },
+  } = context;
 
-  await agent(context);
+  try {
+    let userPrompt = params?.prompt ?? text;
+    const { reply } = await textGeneration(
+      sender.address,
+      userPrompt,
+      await agent_prompt(sender.address)
+    );
+    await processMultilineResponse(sender.address, reply, context);
+  } catch (error) {
+    console.error("Error during OpenAI call:", error);
+    await context.send("An error occurred while processing your request.");
+  }
 });
